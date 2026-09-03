@@ -99,6 +99,63 @@ function App() {
           </div>
         )}
 
+        {!result && !isAnalyzing && (
+          <section className="security-overview">
+
+            <div className="overview-header">
+              <div>
+                <span className="overview-label">AI SECURITY ENGINE</span>
+                <h2>Protect Your AI Interactions</h2>
+                <p>
+                  AI Guardian analyzes prompts for security threats,
+                  privacy risks, and potential data leakage.
+                </p>
+              </div>
+
+              <div className="overview-status">
+                <span className="status-dot"></span>
+                Ready to Analyze
+              </div>
+            </div>
+
+            <div className="security-features">
+
+              <div className="security-feature">
+                <div className="feature-icon">⌁</div>
+                <div>
+                  <h3>Prompt Injection</h3>
+                  <p>Detects attempts to manipulate AI instructions.</p>
+                </div>
+              </div>
+
+              <div className="security-feature">
+                <div className="feature-icon">◈</div>
+                <div>
+                  <h3>Privacy Protection</h3>
+                  <p>Identifies prompts containing sensitive information.</p>
+                </div>
+              </div>
+
+              <div className="security-feature">
+                <div className="feature-icon">◆</div>
+                <div>
+                  <h3>Data Leakage</h3>
+                  <p>Detects requests that may expose confidential data.</p>
+                </div>
+              </div>
+
+              <div className="security-feature">
+                <div className="feature-icon">✓</div>
+                  <div>
+                    <h3>Risk Assessment</h3>
+                    <p>Generates a security score and recommended action.</p>
+                  </div>
+                </div>
+
+              </div>
+
+          </section>
+        )}
 
         {result && (
           <section className="result-section">
@@ -117,16 +174,44 @@ function App() {
                 </span>
              </div>
              
-             <div className="risk-score">
-              {result.risk_score}
-              <span>/100</span>
-            </div>
-            
-            <div className="risk-bar">
+             <div className="risk-score-panel">
               <div
-                className="risk-progress"
-                style={{ width: `${result.risk_score}%` }}
-              ></div>
+                className={`risk-circle risk-${result.risk_level.toLowerCase()}`}
+              >
+                <div className="risk-circle-inner">
+                  <strong>{result.risk_score}</strong>
+                  <span>/100</span>
+                </div>
+              </div>
+
+              <div className="risk-summary">
+                <span className="risk-summary-label">
+                  CURRENT SECURITY LEVEL
+                </span>
+
+                <h3>{result.risk_level} RISK</h3>
+
+                <p>
+                  The analyzed prompt shows a significant number of
+                  security indicators requiring attention.
+                </p>
+              </div>
+            </div>
+
+            <div className="risk-scale">
+              <div className="risk-scale-track">
+                <div
+                  className="risk-scale-progress"
+                  style={{ width: `${result.risk_score}%` }}
+                ></div>
+              </div>
+
+              <div className="risk-scale-labels">
+                <span>LOW</span>
+                <span>MEDIUM</span>
+                <span>HIGH</span>
+                <span>CRITICAL</span>
+              </div>
             </div>
             
             <div className="confidence">
@@ -147,45 +232,103 @@ function App() {
               </div>
 
               <div className="threat-grid">
-                
-                <div className={`threat-item ${result.threats.prompt_injection ? "detected" : "safe"}`}>
-                  <span>Prompt Injection</span>
+
+                <div
+                  className={`threat-item ${
+                    result.threats.prompt_injection ? "detected" : "safe"
+                  }`}
+                >
+                  <div className="threat-info">
+                    <span className="threat-icon">⌁</span>
+                    <div>
+                      <span className="threat-name">Prompt Injection</span>
+                      <small>Instruction manipulation</small>
+                    </div>
+                  </div>
+
                   <strong>
                     {result.threats.prompt_injection ? "Detected" : "Safe"}
                   </strong>
                 </div>
-                
-                <div className={`threat-item ${result.threats.jailbreak ? "detected" : "safe"}`}>
-                  <span>Jailbreak</span>
+
+
+                <div
+                  className={`threat-item ${
+                    result.threats.jailbreak ? "detected" : "safe"
+                  }`}
+                >
+                  <div className="threat-info">
+                    <span className="threat-icon">⚠</span>
+                    <div>
+                      <span className="threat-name">Jailbreak</span>
+                      <small>Safety restriction bypass</small>
+                    </div>
+                  </div>
+
                   <strong>
                     {result.threats.jailbreak ? "Detected" : "Safe"}
                   </strong>
                 </div>
 
-                <div className={`threat-item ${result.threats.unsafe_request ? "detected" : "safe"}`}>
-                  <span>Unsafe Request</span>
+
+                <div
+                  className={`threat-item ${
+                    result.threats.unsafe_request ? "detected" : "safe"
+                  }`}
+                >
+                  <div className="threat-info">
+                    <span className="threat-icon">!</span>
+                    <div>
+                      <span className="threat-name">Unsafe Request</span>
+                      <small>Potentially harmful intent</small>
+                    </div>
+                  </div>
+
                   <strong>
                     {result.threats.unsafe_request ? "Detected" : "Safe"}
                   </strong>
                 </div>
 
-                <div className={`threat-item ${result.threats.privacy_risk ? "detected" : "safe"}`}>
-                  <span>Privacy Risk</span>
-                  <strong>
-                    {result.threats.privacy_risk ? "Detected" : "Safe"}
-                  </strong>
+
+                <div
+                  className={`threat-item ${
+                    result.threats.privacy_risk ? "detected" : "safe"
+                  }`}
+                >
+                  <div className="threat-info">
+                    <span className="threat-icon">◉</span>
+                  <div>
+                    <span className="threat-name">Privacy Risk</span>
+                    <small>Sensitive information exposure</small>
+                  </div>
                 </div>
 
-                <div className={`threat-item ${result.threats.data_leakage ? "detected" : "safe"}`}>
-                  <span>Data Leakage</span>
-                  <strong>
-                    {result.threats.data_leakage ? "Detected" : "Safe"}
-                  </strong>
-                </div>
-
+                <strong>
+                  {result.threats.privacy_risk ? "Detected" : "Safe"}
+                </strong>
               </div>
-           </div>
+            </div>
 
+
+              <div
+                className={`threat-item ${
+                  result.threats.data_leakage ? "detected" : "safe"
+                }`}
+              >
+                <div className="threat-info">
+                  <span className="threat-icon">◆</span>
+                <div>
+                  <span className="threat-name">Data Leakage</span>
+                  <small>Confidential data exposure</small>
+                </div>
+              </div>
+
+              <strong>
+                {result.threats.data_leakage ? "Detected" : "Safe"}
+              </strong>
+            </div>
+
+            </div>
 
             <div className="insight-grid">
 
