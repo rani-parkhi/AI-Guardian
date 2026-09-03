@@ -3,35 +3,42 @@ import { useState } from "react"
 function App() {
   const [prompt, setPrompt] = useState("")
   const [result, setResult] = useState(null)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
 
-  const analyzePrompt = () => {
-    if (!prompt.trim()) {
-      alert("Please enter a prompt.")
-      return
+    const analyzePrompt = () => {
+      if (!prompt.trim()) {
+        alert("Please enter a prompt.")
+        return
+      }
+
+      setIsAnalyzing(true)
+      setResult(null)
+
+      setTimeout(() => {
+        const mockResult = {
+          risk_score: 82,
+          risk_level: "HIGH",
+          confidence: 0.94,
+
+          threats: {
+            prompt_injection: true,
+            jailbreak: false,
+            unsafe_request: false,
+            privacy_risk: true,
+            data_leakage: true
+          },
+
+          explanation:
+            "The prompt attempts to override existing instructions and requests access to potentially sensitive information.",
+
+          recommendation:
+            "Avoid sharing confidential information and remove sensitive data before submitting the prompt."
+        }
+
+          setResult(mockResult)
+          setIsAnalyzing(false)
+      }, 1200)
     }
-
-    const mockResult = {
-      risk_score: 82,
-      risk_level: "HIGH",
-      confidence: 0.94,
-
-      threats: {
-        prompt_injection: true,
-        jailbreak: false,
-        unsafe_request: false,
-        privacy_risk: true,
-        data_leakage: true
-      },
-
-      explanation:
-        "The prompt attempts to override existing instructions and requests access to potentially sensitive information.",
-
-      recommendation:
-        "Avoid sharing confidential information and remove sensitive data before submitting the prompt."
-    }
-
-    setResult(mockResult)
-  }
 
   return (
     <div className="app">
@@ -70,11 +77,27 @@ function App() {
           
           <div className="input-footer">
             <span>{prompt.length} characters</span>
-            <button onClick={analyzePrompt}>
-              Analyze Prompt →
+            <button
+              onClick={analyzePrompt}
+              disabled={isAnalyzing}
+            >
+              {isAnalyzing ? "Analyzing..." : "Analyze Prompt →"}
             </button>
           </div>
         </section>
+
+        {isAnalyzing && (
+          <div className="analysis-status">
+            <div className="analysis-spinner"></div>
+
+            <div>
+              <strong>Analyzing security posture...</strong>
+              <p>
+                AI Guardian is evaluating the prompt for potential threats.
+              </p>
+            </div>
+          </div>
+        )}
 
 
         {result && (
@@ -164,15 +187,51 @@ function App() {
            </div>
 
 
-            <div className="explanation-card">
-              <h3>Why Was This Flagged?</h3>
-              <p>{result.explanation}</p>
-            </div>
+            <div className="insight-grid">
+
+              <div className="insight-card explanation-card">
+                <div className="insight-header">
+                  <div className="insight-icon explanation-icon">
+                    ✦
+                  </div>
+
+                  <div>
+                    <span className="insight-label">EXPLAINABLE AI</span>
+                    <h3>Why Was This Flagged?</h3>
+                  </div>
+                </div>
+
+                <div className="insight-body">
+                  <p>{result.explanation}</p>
+                </div>
+
+                <div className="insight-footer">
+                  <span>Analysis generated from detected threat patterns</span>
+                </div>
+              </div>
 
 
-            <div className="recommendation-card">
-              <h3>Recommended Action</h3>
-              <p>{result.recommendation}</p>
+              <div className="insight-card recommendation-card">
+                <div className="insight-header">
+                  <div className="insight-icon recommendation-icon">
+                    ✓
+                  </div>
+
+                  <div>
+                    <span className="insight-label">SECURITY GUIDANCE</span>
+                    <h3>Recommended Action</h3>
+                  </div>
+                </div>
+
+                <div className="insight-body">
+                  <p>{result.recommendation}</p>
+                </div>
+
+                <div className="insight-footer">
+                  <span>Recommended based on current risk assessment</span>
+                </div>
+              </div>
+
             </div>
 
           </section>
