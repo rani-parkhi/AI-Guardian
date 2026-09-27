@@ -231,9 +231,11 @@ function App() {
                   </h3>
 
                   <p>
-                    The analyzed prompt shows security indicators
-                    requiring attention based on the AI Guardian
-                    security analysis.
+                    {result.risk_level === "Low"
+                    ? "No significant security indicators were detected in the analyzed prompt."
+                    : result.risk_level === "Medium"
+                    ? "The analyzed prompt contains security indicators that require review."
+                    : "The analyzed prompt contains high-risk security indicators requiring immediate attention."}
                   </p>
 
                 </div>
@@ -398,9 +400,9 @@ function App() {
 
                 <div
                   className={`threat-item ${
-                    result.threats.privacy_risk
-                      ? "detected"
-                      : "safe"
+                    result.threats.pii_detected
+                    ? "detected"
+                    : "safe"
                   }`}
                 >
 
@@ -423,7 +425,7 @@ function App() {
                   </div>
 
                   <strong>
-                    {result.threats.privacy_risk
+                    {result.threats.pii_detected
                       ? "Detected"
                       : "Safe"}
                   </strong>
