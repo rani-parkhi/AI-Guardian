@@ -437,7 +437,7 @@ function App() {
 
                 <div
                   className={`threat-item ${
-                    result.threats.pii_detected
+                    result.threats.privacy_risk
                     ? "detected"
                     : "safe"
                   }`}
@@ -462,7 +462,7 @@ function App() {
                   </div>
 
                   <strong>
-                    {result.threats.pii_detected
+                    {result.threats.privacy_risk
                       ? "Detected"
                       : "Safe"}
                   </strong>
