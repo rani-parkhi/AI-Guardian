@@ -294,6 +294,43 @@ function App() {
 
               </div>
 
+              {result.masked_prompt && result.masked_prompt !== result.prompt && (
+                <div className="insight-card">
+                  <div className="insight-header">
+                    <div className="insight-icon">
+                      ◉
+                    </div>
+                    
+                    <div>
+                      <span className="insight-label">
+                        PRIVACY PROTECTION
+                      </span>
+                      
+                      <h3>
+                        PII Masked Successfully
+                      </h3>
+                    </div>
+                  </div>
+                  
+                  <div className="insight-body">
+                    <p>
+                      Sensitive information was detected and masked before
+                      the prompt was sent for LLM analysis.
+                    </p>
+                    
+                    <div className="masked-prompt">
+                      {result.masked_prompt}
+                    </div>
+                  </div>
+                  
+                  <div className="insight-footer">
+                    <span>
+                      Protected data is replaced with redacted placeholders
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <div className="threat-grid">
 
                 <div
