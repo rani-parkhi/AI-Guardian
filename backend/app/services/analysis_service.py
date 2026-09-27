@@ -21,8 +21,14 @@ def analyze_prompt(prompt: str) -> Dict[str, object]:
 
     return {
         "prompt": prompt,
-        "threat_detection": threat_result,
-        "pii_detection": pii_result,
-        "llm_analysis": llm_result,
-        "risk_analysis": xai_result,
+        "risk_score": xai_result["risk_score"],
+        "risk_level": xai_result["risk_level"],
+        "confidence": threat_result["confidence"],
+        "threats": threat_result,
+        "explanation": xai_result["explanation"],
+        "recommendation": (
+            "Prompt appears safe."
+            if xai_result["risk_level"] == "Low"
+            else "Review this prompt carefully before processing."
+        ),
     }
